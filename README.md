@@ -18,9 +18,9 @@
 | 2 | Both customer portals use HTTP, not HTTPS | Security | 🟠 High | Low |
 | 3 | T&C: no click-wrap, UK carrier doc 14 months old | Legal | 🟠 High | Medium |
 | 4 | GDPR: advertising cookies fire without consent category | Compliance | 🟠 High | Low |
-| 5 | Website links to old LinkedIn URL (301 redirect) | Brand consistency | 🟡 Medium | Trivial |
-| 6 | Company rebranded to "ECS Intermodal Supply Chain" on LinkedIn — website still says "European Containers" | Brand consistency | 🟡 Medium | Low |
-| 7 | CEO LinkedIn: default grey header, zero brand presence | Brand | 🟡 Medium | Trivial |
+| 5 | 3 different company names in use: "ECS Group" / "European Containers" / "Intermodal Supply Chain" | Brand consistency | 🟡 Medium | Low |
+| 6 | Website links to old LinkedIn URL (301 redirect, never updated after rebrand) | Brand consistency | 🟡 Medium | Trivial |
+| 7 | CEO LinkedIn: default abstract banner, no ECS brand — 1,949 followers see nothing | Brand | 🟡 Medium | Trivial |
 | 8 | ECS active on 2 social channels vs. 4–5 industry standard | Marketing | 🟡 Medium | Medium |
 | 9 | All T&C PDFs publicly indexable via guessable paths | Info disclosure | 🟢 Low | Low |
 
@@ -133,20 +133,20 @@ Additional observation: the cookie policy version field in the page source reads
 
 ## 5. 🟡 Medium — LinkedIn Brand Name Inconsistency
 
-**Finding:** ECS operates under two different names across website and LinkedIn.
+**Finding:** ECS operates under **three different names** across its own channels simultaneously.
 
 | Channel | Name used |
 |---------|-----------|
 | ecs.be website | ECS European Containers |
-| LinkedIn company URL | `/company/ecs-european-containers` (old) |
-| LinkedIn company page (current) | **ECS Intermodal Supply Chain** |
-| LinkedIn followers | 8,471 |
+| LinkedIn company URL (old, still linked from site) | `ecs-european-containers` → 301 redirect |
+| LinkedIn company page (current) | ECS Intermodal Supply Chain |
+| CEO LinkedIn profile title | **ECS Group** |
 
-The old LinkedIn URL (`linkedin.com/company/ecs-european-containers`) issues a **301 permanent redirect** to `linkedin.com/company/ecs-intermodal-supply-chain`. The ECS website footer still links to the old URL — which works via redirect, but signals that the website was not updated when the LinkedIn profile was rebranded.
+Three names, zero consistency. A prospect who visits the website, then searches LinkedIn, then clicks the CEO profile encounters a different company name at every step.
 
-More significantly: the company name on the website ("ECS European Containers") no longer matches the name on LinkedIn ("ECS Intermodal Supply Chain"). A prospect who looks up ECS on LinkedIn after visiting the website finds a different company name — a friction point for trust and brand recognition.
+The old LinkedIn URL (`linkedin.com/company/ecs-european-containers`) issues a **301 permanent redirect** to `linkedin.com/company/ecs-intermodal-supply-chain`. The ECS website footer still links to the old URL — which works via redirect, but signals the website was never updated after the rebrand.
 
-**Fix:** Align the name across all channels. Update the LinkedIn link in the website footer to the current URL. Decide on the canonical brand name and apply it consistently.
+**Fix:** Decide on a canonical brand name and apply it across website, LinkedIn company page, CEO profile, and all executive profiles. Update the footer link to the current LinkedIn URL.
 
 ---
 
@@ -157,11 +157,11 @@ More significantly: the company name on the website ("ECS European Containers") 
 
 ### Before — Current state
 
-> *Add your screenshot here: drag `ceo-linkedin-before.png` into the `/screenshots/` folder*
+![CEO LinkedIn — before](screenshots/ceo-linkedin-before.png)
 
-The CEO's profile lists ECS as employer but carries LinkedIn's **default grey background** — no logo, no brand colour, no tagline, no visual identity whatsoever.
+The CEO's profile carries LinkedIn's **default abstract grey-teal background** — no ECS logo, no brand colour, no tagline, no visual identity. His title reads **"Chief Executive Officer, ECS Group"** — a third name variant that appears on no other ECS channel (see finding #5).
 
-Every recruiter, customer, investor, or partner who lands on this profile after clicking through from the ECS company page encounters a completely unbranded executive page. The company page itself is correctly represented — but the CEO profile, typically the highest-traffic individual page for any B2B company, communicates nothing.
+With **1,949 followers**, every recruiter, customer, investor, or partner who lands here after clicking through from the ECS company page encounters a completely unbranded executive profile. The company page itself is correctly represented — but the CEO profile, typically the highest-traffic individual page for any B2B company, communicates nothing about the brand.
 
 ### After — Branded banner (generated as part of this audit)
 
