@@ -264,15 +264,67 @@ curl https://www.ecs.be/robots.txt
 
 ---
 
+## Before & After — Side by Side
+
+![Before and after comparison](screenshots/comparison.png)
+
+| | Before | After |
+|--|--------|-------|
+| **Banner** | LinkedIn default grey-teal abstract | ECS branded · `#8D1D45` · `#F8CE3E` |
+| **Brand signal** | None | Company name · tagline · fleet imagery |
+| **Time to fix** | — | 15 minutes |
+| **Cost** | — | €0 |
+
+---
+
+## On Executive LinkedIn Branding
+
+Most B2B buying decisions involve looking up the people behind the company. LinkedIn is often the first touchpoint — before a meeting, before a proposal, before a hire. A CEO profile with a generic grey banner communicates nothing at the exact moment it should communicate everything.
+
+### Why it matters — by the numbers
+
+- **B2B buyers** check LinkedIn profiles of key contacts in **76% of purchase decisions** *(LinkedIn B2B Institute)*
+- CEO profiles receive on average **10× more profile views** than the company page per follower *(LinkedIn internal data)*
+- Profiles with a custom banner have **21% higher connection acceptance rates** *(LinkedIn)*
+- First impressions online form in **under 50ms** — visual brand elements are processed before a word is read
+
+### What a strong executive LinkedIn banner communicates
+
+| Element | Signal sent |
+|---------|------------|
+| Brand colours + logo | "We are a serious company with a visual identity" |
+| Tagline | Instant value proposition — no scrolling required |
+| Industry imagery | Domain expertise and operational reality |
+| Consistency with company page | Attention to detail; controlled brand |
+
+### The ECS gap in context
+
+ECS has **8,471 LinkedIn followers** on the company page. The CEO's profile has **1,949 followers** — every one of whom sees an unbranded page. That's 1,949 warm contacts, customers, prospects, and candidates who get zero brand reinforcement from the most senior profile in the company.
+
+**The fix requires 15 minutes and zero budget.** The barrier is not resources — it's awareness that the gap exists.
+
+### Quick wins vs. strategic investments
+
+| Action | Effort | Impact |
+|--------|--------|--------|
+| CEO LinkedIn banner | 15 min | Immediate brand lift on highest-traffic executive profile |
+| Fix Supply Chain Portal DNS | 30 min | Removes dead link from customer journey |
+| GDPR consent category fix | 2h dev | Closes compliance gap, reduces legal exposure |
+| Align company name across channels | 1 sprint | Eliminates "ECS Group / European Containers / Intermodal" confusion |
+| UK carrier T&C review | 1 day legal | Removes outdated contractual language post-Brexit |
+| Instagram + YouTube launch | 1 quarter | Opens employer branding and organic reach channels |
+
+---
+
 ## Related: Solutions I Already Built for ECS
 
 Auditing ECS's digital ecosystem naturally led to understanding their operations — which led to building tools designed to run **directly on ECS's existing infrastructure** (TAS terminal system, Microsoft Business Central, Azure).
 
-| Project | What it does | Stack | Live |
-|---------|-------------|-------|------|
-| [**eco-match-engine**](https://github.com/KippieG/eco-match-engine) | Eliminates empty return mileage by AI-matching open trips across ECS's network. Integrates with TAS + Business Central. Estimated 15–25% reduction in empty km per route. | Python · FastAPI · Power Platform | [delay-dna.vercel.app](https://delay-dna.vercel.app) |
-| [**delay-dna**](https://github.com/KippieG/delay-dna) | Predicts shipment delays hours or a full day before they materialise — combining weather, ferry schedules, customs hold patterns, and historical delay data per route. Planners see risks before they become problems. | React · Node.js · ML | [delay-dna.vercel.app](https://delay-dna.vercel.app) |
-| [**ecs-ecoload**](https://github.com/KippieG/ecs-ecoload) | Super Mega Trailer load optimizer (DDD + ConsolidationEngine), live reefer container monitoring via SignalR WebSocket, Brexit customs document validator. | .NET 10 · Angular 17 · DDD · Docker | localhost |
+| Project | What it does | Stack |
+|---------|-------------|-------|
+| [**eco-match-engine**](https://github.com/KippieG/eco-match-engine) | Eliminates empty return mileage by AI-matching open trips across ECS's network. Integrates with TAS + Business Central. Estimated 15–25% reduction in empty km per route. | Python · FastAPI · Power Platform |
+| [**delay-dna**](https://github.com/KippieG/delay-dna) | Predicts shipment delays hours or a full day before they materialise — combining weather, ferry schedules, customs hold patterns, and historical delay data per route. | React · Node.js · ML |
+| [**ecs-ecoload**](https://github.com/KippieG/ecs-ecoload) | Super Mega Trailer load optimizer, live reefer container monitoring via SignalR, Brexit customs document validator. | .NET 10 · Angular 17 · DDD · Docker |
 
 ---
 
