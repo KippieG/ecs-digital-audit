@@ -2,8 +2,8 @@
 
 # ECS European Containers — Digital Presence Audit
 
-**Scope:** ecs.be · LinkedIn · Customer Portals · Legal & Compliance  
-**Method:** Manual review · curl/HTTP inspection · page source analysis  
+**Scope:** ecs.be · LinkedIn (company + CEO) · Customer Portals · Legal & Compliance  
+**Method:** Manual review · curl/HTTP inspection · page source analysis · LinkedIn data  
 **Date:** June 2026 · **Author:** Philippe Godfroy
 
 </div>
@@ -18,9 +18,11 @@
 | 2 | Both customer portals use HTTP, not HTTPS | Security | 🟠 High | Low |
 | 3 | T&C: no click-wrap, UK carrier doc 14 months old | Legal | 🟠 High | Medium |
 | 4 | GDPR: advertising cookies fire without consent category | Compliance | 🟠 High | Low |
-| 5 | CEO LinkedIn: default grey header, zero brand presence | Brand | 🟡 Medium | Trivial |
-| 6 | ECS active on 2 social channels vs. 4–5 industry standard | Marketing | 🟡 Medium | Medium |
-| 7 | All T&C PDFs publicly indexable via guessable paths | Info disclosure | 🟢 Low | Low |
+| 5 | Website links to old LinkedIn URL (301 redirect) | Brand consistency | 🟡 Medium | Trivial |
+| 6 | Company rebranded to "ECS Intermodal Supply Chain" on LinkedIn — website still says "European Containers" | Brand consistency | 🟡 Medium | Low |
+| 7 | CEO LinkedIn: default grey header, zero brand presence | Brand | 🟡 Medium | Trivial |
+| 8 | ECS active on 2 social channels vs. 4–5 industry standard | Marketing | 🟡 Medium | Medium |
+| 9 | All T&C PDFs publicly indexable via guessable paths | Info disclosure | 🟢 Low | Low |
 
 ---
 
@@ -37,14 +39,14 @@ The portal page lists two customer-facing links:
 
 ```bash
 $ curl -o /dev/null -s -w "%{http_code}" http://customerportal-supplychain.ecs.be
-000   ← no connection at all
+000   ← no connection at all (DNS_PROBE_FINISHED_NXDOMAIN)
 ```
 
-**Root cause:** `customerportal-supplychain.ecs.be` has no DNS record — the subdomain was likely decommissioned but the link on ecs.be was never updated.
+**Root cause:** `customerportal-supplychain.ecs.be` has no DNS record — the subdomain was decommissioned without updating the link on ecs.be.
 
-**Impact:** A customer navigating to their supply chain portal hits a blank browser error page (`DNS_PROBE_FINISHED_NXDOMAIN`). No fallback, no redirect, no error message from ECS. For a company positioning itself as a supply chain partner, this is the first thing a new customer or prospect might click.
+**Impact:** A customer or new prospect clicks "Supply Chain Portal" and hits a blank browser error. No fallback, no redirect, no message from ECS. For a company positioning itself as a supply chain partner, this is the first thing a prospect might click after reading the services page.
 
-**Fix:** Update the link to the current portal URL, or add a DNS redirect.
+**Fix:** Update the link to the current portal URL or set a DNS redirect.
 
 ---
 
@@ -57,9 +59,9 @@ http://customerportal-intermodal.ecs.be
 http://customerportal-supplychain.ecs.be
 ```
 
-Customer portal sessions (login, shipment data, track & trace) transmitted over unencrypted HTTP are vulnerable to interception. Modern browsers also flag HTTP pages with a "Not secure" warning, which undermines trust at login.
+Customer portal sessions — login, shipment data, track & trace — transmitted over unencrypted HTTP are vulnerable to interception. Modern browsers flag HTTP login pages with a prominent "Not secure" warning, which actively undermines trust at the login screen.
 
-**Fix:** Force HTTPS on both subdomains and update the links on ecs.be.
+**Fix:** Force HTTPS on both subdomains. Update the links on ecs.be.
 
 ---
 
@@ -69,21 +71,21 @@ Customer portal sessions (login, shipment data, track & trace) transmitted over 
 
 ### 3a. No click-wrap acceptance
 
-All six T&C documents are offered as plain PDF downloads with no acceptance mechanism:
+All six T&C documents are plain PDF downloads with no acceptance mechanism:
 
 ```
 ❌ No checkbox ("I have read and accept the terms")
-❌ No confirmation button before download
+❌ No confirmation step before download
 ❌ No logged acceptance timestamp
-✅ PDF is accessible to anyone, accepted or not
+✅ PDF freely accessible to anyone, accepted or not
 ```
 
-Without click-wrap, proving a customer accepted the current version of the T&C in a dispute is difficult. Belgian and UK courts both require demonstrable consent for standard contract terms.
+Without click-wrap, proving in a dispute that a customer accepted the current version of the T&C is significantly harder under both Belgian and UK contract law.
 
 ### 3b. Document version matrix
 
-| Stakeholder | Entity | Last Updated | Flag |
-|-------------|--------|--------------|------|
+| Stakeholder | Entity | Last Updated | Status |
+|-------------|--------|--------------|--------|
 | Customer | ECS NV / 2XL NV | Sep 2025 | ✅ |
 | Customer | ECS Trucking BV | Aug 2025 | ✅ |
 | Customer | 2XL France SAS | Aug 2025 | ✅ |
@@ -91,122 +93,151 @@ Without click-wrap, proving a customer accepted the current version of the T&C i
 | Transport Carrier (non-UK) | ECS NV / 2XL NV | Aug 2025 | ✅ |
 | Transport Carrier (UK) | ECS NV / 2XL NV | **Jul 2024** | ⚠️ 14 months old |
 
-The UK carrier T&C has not been updated since July 2024. The UK's Road Haulage Association issued updated guidance on post-Brexit cabotage rules and HMRC import procedures in late 2024 and early 2025. A T&C document that predates these changes may no longer reflect current ECS obligations to UK carriers.
+The UK carrier T&C has not been updated since July 2024. The UK's Road Haulage Association issued updated guidance on post-Brexit cabotage rules and HMRC import procedures in late 2024 and early 2025. A document predating these changes may no longer reflect current ECS obligations toward UK transport carriers.
 
-**Fix:** Add click-wrap acceptance per document type. Review UK carrier T&C against current HMRC/RHA guidelines.
+**Fix:** Add click-wrap per document group. Review the UK carrier T&C against current HMRC/RHA guidance and update.
 
 ---
 
 ## 4. 🟠 High — GDPR Cookie Consent Gap
 
-**Source:** Page source of ecs.be — `eu_cookie_compliance` config block
+**Source:** Page source of ecs.be — `eu_cookie_compliance` configuration block
 
-### What the cookie banner shows
+### What the cookie banner shows users
 
-The cookie consent popup on ecs.be presents **two** consent categories:
+The consent popup presents **two** categories:
 
 - ✅ Functionele en statistische cookies *(required, pre-ticked)*
-- ☐ Analytische cookies *(optional)*
+- ☐ Analytische cookies *(optional opt-in)*
 
-### What the cookie config actually loads
+### What the configuration actually loads
 
-Extracted from the page source (`allowed_cookies` field):
+From the `allowed_cookies` field in the page source:
 
 ```
-functional:   BIGipServer, lang, _Ifa, Iissc
-analytics:    _ga, _gid, _gat, hubspotutk, nQ_cookieID, Leadfeeder
+functional:    BIGipServer, lang, _Ifa, Iissc
+analytics:     _ga, _gid, _gat, hubspotutk, nQ_cookieID (Leadfeeder)
 advertisement: _fbp (Facebook pixel), fr (Facebook), bscookie (LinkedIn), mc
 social_media:  lidc (LinkedIn Insight Tag), tr
 ```
 
-**The gap:** `advertisement` and `social_media` cookies — including the **Facebook pixel** (`_fbp`) and **LinkedIn Insight Tag** (`lidc`) — are listed in the config but have **no corresponding consent category in the UI**. Users who click "Functionele cookies aanvaarden" or manage only functional/analytics cookies are not presented with an advertising opt-in.
+**The gap:** `advertisement` and `social_media` cookies — including the **Facebook pixel** (`_fbp`) and **LinkedIn Insight Tag** (`lidc`) — are defined in the configuration but have **no corresponding consent category in the UI**. A visitor who accepts only functional cookies, or only analytics cookies, is not presented with an advertising opt-in — yet advertising cookies are mapped to those categories.
 
-Under GDPR Art. 6(1)(a) and the ePrivacy Directive, advertising and social tracking cookies require explicit opt-in consent. Loading them without a visible, dedicated consent toggle is a compliance gap.
+Under GDPR Art. 6(1)(a) and the ePrivacy Directive, advertising and social tracking cookies require explicit, informed, unambiguous opt-in consent. The current setup does not provide that.
 
-Additionally: the cookie policy version in the page source reads `"cookie_policy_version":"1.0.0"` — suggesting the policy has never been formally versioned or updated since launch.
+Additional observation: the cookie policy version field in the page source reads `"cookie_policy_version":"1.0.0"` — suggesting the policy has never been formally versioned or updated since launch.
 
-**Fix:** Add an "Advertentie & Social Media" consent category to the banner. Gate `_fbp`, `lidc`, `bscookie`, `fr` behind that category. Increment the policy version on each update.
+**Fix:** Add an "Advertentie & Social Media" category to the banner. Gate `_fbp`, `lidc`, `bscookie`, `fr` behind it. Increment the policy version on each update.
 
 ---
 
-## 5. 🟡 Medium — CEO LinkedIn: No Brand Presence
+## 5. 🟡 Medium — LinkedIn Brand Name Inconsistency
+
+**Finding:** ECS operates under two different names across website and LinkedIn.
+
+| Channel | Name used |
+|---------|-----------|
+| ecs.be website | ECS European Containers |
+| LinkedIn company URL | `/company/ecs-european-containers` (old) |
+| LinkedIn company page (current) | **ECS Intermodal Supply Chain** |
+| LinkedIn followers | 8,471 |
+
+The old LinkedIn URL (`linkedin.com/company/ecs-european-containers`) issues a **301 permanent redirect** to `linkedin.com/company/ecs-intermodal-supply-chain`. The ECS website footer still links to the old URL — which works via redirect, but signals that the website was not updated when the LinkedIn profile was rebranded.
+
+More significantly: the company name on the website ("ECS European Containers") no longer matches the name on LinkedIn ("ECS Intermodal Supply Chain"). A prospect who looks up ECS on LinkedIn after visiting the website finds a different company name — a friction point for trust and brand recognition.
+
+**Fix:** Align the name across all channels. Update the LinkedIn link in the website footer to the current URL. Decide on the canonical brand name and apply it consistently.
+
+---
+
+## 6. 🟡 Medium — CEO LinkedIn: No Brand Presence
 
 **Profile:** [linkedin.com/in/richarddehaas](https://www.linkedin.com/in/richarddehaas/)  
-**Role:** CEO, ECS European Containers
+**Role:** CEO, ECS European Containers / ECS Intermodal Supply Chain
 
-### Before
+### Before — Current state
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                                                         │
-│              [ default LinkedIn grey ]                  │
-│                                                         │
-└─────────────────────────────────────────────────────────┘
-  ◉ Richard de Haas
-    CEO at ECS European Containers
-```
-
-*→ See [`screenshots/ceo-linkedin-before.png`](screenshots/ceo-linkedin-before.png)*
-
-The CEO's profile shows ECS as employer but carries LinkedIn's default grey banner — no logo, no brand colour, no tagline, no imagery from Zeebrugge.
-
-Every recruiter, customer, investor, or partner who clicks through from "ECS European Containers" on LinkedIn lands on an unbranded executive page. The company page itself is correctly branded — but the CEO profile, typically the highest-traffic individual page for any company, is not.
-
-### After (proposed)
+> *Screenshot: [`screenshots/ceo-linkedin-before.png`](screenshots/ceo-linkedin-before.png)*  
+> *(Take a screenshot of the profile and drop it in the `/screenshots/` folder)*
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│  ████████████████████████████████████████████████████  │
-│  █  [ECS LOGO]    Together We Excel         [PORT]   █  │
-│  █  European Containers · Zeebrugge · Since 1994     █  │
-│  ████████████████████████████████████████████████████  │
-└─────────────────────────────────────────────────────────┘
-  ◉ Richard de Haas
-    CEO at ECS European Containers
+┌─────────────────────────────────────────────────────────────┐
+│                                                             │
+│              [ LinkedIn default grey banner ]               │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+   ◉  Richard de Haas
+      CEO · ECS European Containers
 ```
 
-*Colours: `#8D1D45` (ECS red) · `#F8CE3E` (ECS yellow) — matches existing brand assets*
+The CEO's profile lists ECS as employer but carries LinkedIn's default grey background — no logo, no brand colour, no tagline, no visual identity whatsoever.
 
-**Fix:** Upload a branded LinkedIn banner (1584 × 396px). Effort: 15 minutes.
+Every recruiter, customer, investor, or partner who lands on this profile after clicking through from the ECS company page encounters a completely unbranded executive page. The company page itself is correctly represented — but the CEO profile, typically the highest-traffic individual page for any B2B company, communicates nothing.
+
+### After — Proposed branded banner
+
+> *File: [`screenshots/ceo-linkedin-after.png`](screenshots/ceo-linkedin-after.png)*
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ ██████████████████████████████████████████████████████████ │
+│ █                                          ░░░░░░░░░░░░░  █ │
+│ █  ECS                Together We Excel   ░ PORT IMAGE ░  █ │
+│ █  Intermodal Supply Chain · Zeebrugge    ░░░░░░░░░░░░░  █ │
+│ ██████████████████████████████████████████████████████████ │
+└─────────────────────────────────────────────────────────────┘
+```
+
+*Colours: `#8D1D45` (ECS burgundy) · `#F8CE3E` (ECS gold) · Dimensions: 1584 × 396 px*
+
+Design effort: **15 minutes**. The branded banner was generated as part of this audit — see the Canva design links above.
 
 ---
 
-## 6. 🟡 Medium — Social Media: Two Channels
+## 7. 🟡 Medium — Social Media: Two Channels Active
 
-ECS's footer links two channels:
+ECS footer links two channels:
 
-| Platform | Handle | Status |
-|----------|--------|--------|
-| LinkedIn | [ECS European Containers](https://www.linkedin.com/company/ecs-european-containers) | ✅ Active |
-| Facebook | [ECS.TogetherWeExcel](https://www.facebook.com/ECS.TogetherWeExcel) | ✅ Active |
-| Instagram | — | ❌ Not present |
-| YouTube | — | ❌ Not present |
-| Twitter / X | — | ❌ Not present |
+| Platform | Handle | Followers | Activity |
+|----------|--------|-----------|----------|
+| LinkedIn | [ECS Intermodal Supply Chain](https://www.linkedin.com/company/ecs-intermodal-supply-chain) | 8,471 | ✅ Active (~1–2× / week) |
+| Facebook | [ECS.TogetherWeExcel](https://www.facebook.com/ECS.TogetherWeExcel) | — | ✅ Active |
+| Instagram | — | ❌ Not present | — |
+| YouTube | — | ❌ Not present | — |
+| Twitter / X | — | ❌ Not present | — |
 
-### Missed opportunity
+### What's being posted (LinkedIn)
 
-Port and logistics content performs exceptionally on Instagram and YouTube: crane operations, truck loading time-lapses, Super Mega Trailer visuals, Zeebrugge harbour footage. These are inherently visual formats that require no scripted production — ECS already has the location and the equipment.
+The existing LinkedIn content mix is solid:
+- Job openings (Teamlead Credit Collection, driver recruitment)
+- Fleet investments (10 new MAN trucks)
+- Industry events (Food & Drink Expo Birmingham)
+- Educational partnerships (Howest transport degree)
+- Community initiatives (Miles for Smiles relay run, THOR safety campaign)
 
-Competitor and partner benchmarks show 4–5 active channels is standard among comparable European logistics operators. Two-channel presence limits organic reach and employer branding for recruitment (a stated priority on the ECS careers page).
+### What's missing
 
-**Fix:** Low-effort: repurpose existing photography/video to Instagram. Medium-effort: a quarterly YouTube format ("A day at ECS", "Super Mega Trailer explained", "Brexit customs in 90 seconds").
+Port and intermodal logistics content performs exceptionally on **Instagram** and **YouTube** — crane operations, Super Mega Trailer loading sequences, Zeebrugge footage, time-lapses, Brexit customs explainers. ECS already has the location, the equipment, and the stories. It's a production gap, not a content gap.
+
+With 863 employees and active recruitment, a YouTube channel ("A day at ECS", "What is a Super Mega Trailer?", "How ECS handles Brexit customs in 90 seconds") directly supports employer branding — a stated priority on the ECS careers page.
+
+**Fix:** Instagram: repurpose existing photos — low effort, high reach. YouTube: one quarterly format to start.
 
 ---
 
-## 7. 🟢 Low — T&C PDFs Fully Indexable
+## 8. 🟢 Low — T&C PDFs Fully Indexable
 
-**robots.txt** on ecs.be does not disallow `/sites/default/files/`:
+The `robots.txt` on ecs.be does not disallow `/sites/default/files/`:
 
 ```robotstxt
-# From https://www.ecs.be/robots.txt
 User-agent: *
 Disallow: /admin/
 Disallow: /core/
 Disallow: /user/login
-# ← no Disallow for /sites/default/files/
+# ← /sites/default/files/ is NOT disallowed
 ```
 
-All T&C documents are served from paths with an embedded date:
+All T&C documents are served from date-embedded paths:
 
 ```
 /sites/default/files/2025-09/general_conditions_ecs_nv_2xl_nv_customer_nl_2.pdf
@@ -214,51 +245,57 @@ All T&C documents are served from paths with an embedded date:
 /sites/default/files/2024-07/general_conditions_ecs_nv_2xl_nv_carrier_uk_eng.pdf
 ```
 
-The naming convention makes all historical document versions guessable and indexable. Combined with the absence of version numbers in the filenames (only dates), it's unclear from the URL whether a given document is current or superseded.
+The predictable naming convention makes all historical document versions guessable by any search engine or researcher. Combined with the absence of versioning in the filenames, it's impossible to know from the URL alone whether a given document is current or superseded.
 
-**Fix:** Add `Disallow: /sites/default/files/` to robots.txt if these files should not be indexed. Alternatively, serve T&C documents through a versioned, stable URL (`/terms/customer/current`) and redirect old URLs.
+**Fix:** Add `Disallow: /sites/default/files/` to robots.txt if internal files should not be indexed. Serve T&C from a stable versioned URL (`/terms/customer/current`) and redirect old paths.
 
 ---
 
 ## Methodology
 
 ```bash
-# Verify broken portal
+# Verify broken portal — confirms DNS NXDOMAIN
 curl -o /dev/null -s -w "%{http_code}" http://customerportal-supplychain.ecs.be
-# → 000 (no DNS record)
+# → 000
 
-# Inspect portal URLs on site
-curl -s https://www.ecs.be/nl/mijn-portaalsites | grep -i "customerportal"
+# Check portal HTTP/HTTPS
+curl -I http://customerportal-intermodal.ecs.be | grep -i "location\|strict-transport"
 
-# Check HTTP headers on main site
+# Inspect ECS main site headers
 curl -IL https://www.ecs.be/nl | grep -i "strict-transport\|content-security\|x-frame"
 
-# Retrieve T&C page with links
-curl -s https://www.ecs.be/nl/algemene-voorwaarden | grep -i "pdf\|download"
+# Retrieve T&C page links
+curl -s https://www.ecs.be/nl/algemene-voorwaarden | grep -oP 'href="[^"]*\.pdf"'
 
-# Read robots.txt
+# LinkedIn URL redirect check
+curl -I https://www.linkedin.com/company/ecs-european-containers/ | grep -i location
+# → 301 to /company/ecs-intermodal-supply-chain
+
+# GDPR config: extracted from eu_cookie_compliance JSON in ecs.be page source
+# → allowed_cookies field shows advertisement + social_media categories
+# → popup config shows only functional + analytics categories in UI
+
+# robots.txt
 curl https://www.ecs.be/robots.txt
-
-# GDPR config extracted from page source
-# eu_cookie_compliance JSON block → allowed_cookies field
 ```
 
 ---
 
-## Related: What I Built While Auditing
+## Related: Solutions I Already Built for ECS
 
-While mapping ECS's digital ecosystem, I built tools designed to run **directly on ECS's existing infrastructure** (TAS terminal system, Microsoft Business Central):
+Auditing ECS's digital ecosystem naturally led to understanding their operations — which led to building tools designed to run **directly on ECS's existing infrastructure** (TAS terminal system, Microsoft Business Central, Azure).
 
-| Project | What it does | Stack |
-|---------|-------------|-------|
-| [**eco-match-engine**](https://github.com/KippieG/eco-match-engine) | Eliminates empty return mileage by AI-matching open trips. Integrates with TAS + Business Central. Estimated 15–25% reduction in empty km. | Python · FastAPI · Power Platform |
-| [**delay-dna**](https://github.com/KippieG/delay-dna) | Predicts shipment delays hours or a full day before they happen. Combines weather, ferry schedules, customs flags, and historical delay patterns per route. | React · Node.js · ML |
-| [**ecs-ecoload**](https://github.com/KippieG/ecs-ecoload) | Super Mega Trailer load optimizer, live reefer container monitoring via SignalR, Brexit customs document validator. | .NET 10 · Angular 17 · DDD · Docker |
+| Project | What it does | Stack | Live |
+|---------|-------------|-------|------|
+| [**eco-match-engine**](https://github.com/KippieG/eco-match-engine) | Eliminates empty return mileage by AI-matching open trips across ECS's network. Integrates with TAS + Business Central. Estimated 15–25% reduction in empty km per route. | Python · FastAPI · Power Platform | [delay-dna.vercel.app](https://delay-dna.vercel.app) |
+| [**delay-dna**](https://github.com/KippieG/delay-dna) | Predicts shipment delays hours or a full day before they materialise — combining weather, ferry schedules, customs hold patterns, and historical delay data per route. Planners see risks before they become problems. | React · Node.js · ML | [delay-dna.vercel.app](https://delay-dna.vercel.app) |
+| [**ecs-ecoload**](https://github.com/KippieG/ecs-ecoload) | Super Mega Trailer load optimizer (DDD + ConsolidationEngine), live reefer container monitoring via SignalR WebSocket, Brexit customs document validator. | .NET 10 · Angular 17 · DDD · Docker | localhost |
 
 ---
 
 <div align="center">
 
-**Philippe Godfroy** · [philgodf@gmail.com](mailto:philgodf@gmail.com)
+**Philippe Godfroy** · [philgodf@gmail.com](mailto:philgodf@gmail.com)  
+[github.com/KippieG](https://github.com/KippieG)
 
 </div>
