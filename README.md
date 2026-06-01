@@ -161,15 +161,14 @@ The old LinkedIn URL (`linkedin.com/company/ecs-european-containers`) issues a *
 
 The CEO's profile carries LinkedIn's **default abstract grey-teal background** — no ECS logo, no brand colour, no tagline, no visual identity. His title reads **"Chief Executive Officer, ECS Group"** — a third name variant that appears on no other ECS channel (see finding #5).
 
-With **1,949 followers**, every recruiter, customer, investor, or partner who lands here after clicking through from the ECS company page encounters a completely unbranded executive profile. The company page itself is correctly represented — but the CEO profile, typically the highest-traffic individual page for any B2B company, communicates nothing about the brand.
+With **1,949 followers**, every recruiter, customer, investor, or partner who lands here encounters a completely unbranded executive profile.
 
-### After — Branded banner (generated as part of this audit)
+### After — With ECS branded banner applied
 
-![ECS LinkedIn banner — after](screenshots/ceo-linkedin-after.png)
+![CEO LinkedIn — after](screenshots/ceo-linkedin-after-profile.png)
 
-*Colours: `#8D1D45` (ECS burgundy) · `#F8CE3E` (ECS gold) · "Together We Excel in freight solutions"*
-
-Design effort: **15 minutes**. Zero budget.
+*Colours: `#8D1D45` (ECS burgundy) · `#F8CE3E` (ECS gold) · "Together We Excel in freight solutions"*  
+*Banner designed and mocked up as part of this audit. Design effort: **15 minutes**. Zero budget.*
 
 ---
 
