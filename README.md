@@ -163,12 +163,17 @@ The CEO's profile carries LinkedIn's **default abstract grey-teal background** �
 
 With **1,949 followers**, every recruiter, customer, investor, or partner who lands here encounters a completely unbranded executive profile.
 
-### After — With ECS branded banner applied
+### Proposed banner — designed as part of this audit
+
+![ECS LinkedIn banner — proposed](screenshots/ceo-linkedin-after.png)
+
+*`#8D1D45` (ECS burgundy) · `#F8CE3E` (ECS gold) · "Together We Excel in freight solutions" · 1584 × 396 px*
+
+### After — Profile with branded banner applied
 
 ![CEO LinkedIn — after](screenshots/ceo-linkedin-after-profile.png)
 
-*Colours: `#8D1D45` (ECS burgundy) · `#F8CE3E` (ECS gold) · "Together We Excel in freight solutions"*  
-*Banner designed and mocked up as part of this audit. Design effort: **15 minutes**. Zero budget.*
+*Design effort: **15 minutes**. Zero budget. Immediate brand impact.*
 
 ---
 
