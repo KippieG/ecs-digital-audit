@@ -157,40 +157,19 @@ More significantly: the company name on the website ("ECS European Containers") 
 
 ### Before — Current state
 
-> *Screenshot: [`screenshots/ceo-linkedin-before.png`](screenshots/ceo-linkedin-before.png)*  
-> *(Take a screenshot of the profile and drop it in the `/screenshots/` folder)*
+> *Add your screenshot here: drag `ceo-linkedin-before.png` into the `/screenshots/` folder*
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                                                             │
-│              [ LinkedIn default grey banner ]               │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
-   ◉  Richard de Haas
-      CEO · ECS European Containers
-```
-
-The CEO's profile lists ECS as employer but carries LinkedIn's default grey background — no logo, no brand colour, no tagline, no visual identity whatsoever.
+The CEO's profile lists ECS as employer but carries LinkedIn's **default grey background** — no logo, no brand colour, no tagline, no visual identity whatsoever.
 
 Every recruiter, customer, investor, or partner who lands on this profile after clicking through from the ECS company page encounters a completely unbranded executive page. The company page itself is correctly represented — but the CEO profile, typically the highest-traffic individual page for any B2B company, communicates nothing.
 
-### After — Proposed branded banner
+### After — Branded banner (generated as part of this audit)
 
-> *File: [`screenshots/ceo-linkedin-after.png`](screenshots/ceo-linkedin-after.png)*
+![ECS LinkedIn banner — after](screenshots/ceo-linkedin-after.png)
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│ ██████████████████████████████████████████████████████████ │
-│ █                                          ░░░░░░░░░░░░░  █ │
-│ █  ECS                Together We Excel   ░ PORT IMAGE ░  █ │
-│ █  Intermodal Supply Chain · Zeebrugge    ░░░░░░░░░░░░░  █ │
-│ ██████████████████████████████████████████████████████████ │
-└─────────────────────────────────────────────────────────────┘
-```
+*Colours: `#8D1D45` (ECS burgundy) · `#F8CE3E` (ECS gold) · "Together We Excel in freight solutions"*
 
-*Colours: `#8D1D45` (ECS burgundy) · `#F8CE3E` (ECS gold) · Dimensions: 1584 × 396 px*
-
-Design effort: **15 minutes**. The branded banner was generated as part of this audit — see the Canva design links above.
+Design effort: **15 minutes**. Zero budget.
 
 ---
 
